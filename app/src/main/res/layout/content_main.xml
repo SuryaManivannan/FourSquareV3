@@ -48,16 +48,16 @@
         android:layout_alignStart="@+id/textView" />
 
     <TextView
-        android:layout_width="230dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
+        android:layout_centerHorizontal="true"
         android:text="Operation"
-        android:textSize="30dp"
+        android:textSize="75dp"
         android:textAlignment="textStart"
         android:layout_marginLeft="0dp"
-        android:id="@+id/operation"
-        android:layout_alignTop="@+id/target"
-        android:layout_alignParentStart="true" />
+        android:layout_marginTop="165dp"
+        android:id="@+id/operation" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -65,16 +65,16 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:textSize="30dp"
         android:layout_marginTop="190dp"
-        android:layout_marginLeft="180dp"
-        android:text="Target Value"
+        android:layout_marginLeft="380dp"
         android:id="@+id/target" />
     <TextView
         android:layout_width="155dp"
-        android:layout_height="wrap_content"
+        android:layout_height="110dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/right"
         android:background="#1fdf12"
         android:layout_marginLeft="0dp"
+        android:layout_marginTop="40dp"
         android:text="0"
         android:textSize="100dp"
         android:textAlignment="center"
@@ -82,14 +82,15 @@
 
     <TextView
         android:layout_width="155dp"
-        android:layout_height="wrap_content"
+        android:layout_height="110dp"
         android:textAppearance="?android:attr/textAppearanceLarge"
         android:id="@+id/wrong"
         android:textAlignment="center"
         android:background="#e20b20"
         android:text="0"
         android:textSize="100dp"
-        android:layout_marginLeft="230dp"
+        android:layout_marginLeft="215dp"
+        android:layout_marginTop="40dp"
         android:layout_alignParentTop="true"/>
 
     <TextView
@@ -105,16 +106,26 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="SCORE"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Correct"
+        android:textSize="35dp"
         android:id="@+id/textView2"
+        android:layout_marginTop="0dp"
         android:layout_alignParentTop="true"
-        android:layout_marginLeft="101dp"
-        android:layout_marginTop="42dp"
-        android:minHeight="100dp"
-        android:minWidth="180dp"
-        android:textSize="25dp"
-        android:textAlignment="center"
-        android:nestedScrollingEnabled="false"
+        android:layout_marginStart="18dp"
         android:textColor="#000000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:attr/textAppearanceLarge"
+        android:text="Incorrect"
+        android:textSize="35dp"
+        android:layout_marginTop="0dp"
+        android:id="@+id/textView3"
+        android:layout_alignParentTop="true"
+        android:layout_marginStart="220dp"
+        android:textColor="#000000" />
+
 
 </RelativeLayout>

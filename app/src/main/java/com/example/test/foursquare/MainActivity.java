@@ -1,38 +1,49 @@
 package com.example.test.foursquare;
 
+import android.content.Context;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.Vibrator;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.Html;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.test.foursquare.R;
+import com.google.android.gms.analytics.HitBuilders;
+import com.google.android.gms.analytics.Tracker;
 
 import java.util.Random;
 
 public class MainActivity extends AppCompatActivity {
     private int[] numberStore = new int[4];
-    private String[] operations = {"Addition", "Subtraction", "Multiplication", "Division"};
+    private String[] operations = {"Add", "Subtract", "Multiply", "Divide"};
     private int target, amountPressed = 0, userChoice1, userChoice2, amountRight, amountWrong;
-    private String method, previousMethod = "";
+    private String method, localMethod="", previousMethod = "", slot1="_", slot2="_";
     private CountDownTimer timer;
+    private Tracker mTracker;
+    Vibrator v;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
+        AnalyticsApplication application = (AnalyticsApplication) getApplication();
+        mTracker = application.getDefaultTracker();
+        v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         startLocal();
 
         //TIMER
-        timer = new CountDownTimer(4000, 1000) {
+        timer = new CountDownTimer(5000, 1000) {
 
             public void onTick(long millisUntilFinished) {
             }
@@ -49,20 +60,29 @@ public class MainActivity extends AppCompatActivity {
         Button num4 = (Button)findViewById(R.id.num4);
         final TextView right = (TextView)findViewById(R.id.right);
         final TextView wrong = (TextView)findViewById(R.id.wrong);
+
         num1.setOnClickListener(
                 new Button.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        mTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("Action")
+                                .setAction("Share")
+                                .build());
                         if (amountPressed == 0) {
                             userChoice1 = numberStore[0];
                             amountPressed++;
+                            slot1 = numberStore[0]+"";
+                            operationTextSetter();
                         } else if (amountPressed == 1) {
                             userChoice2 = numberStore[0];
-                            checker();
+                            slot2 = numberStore[0]+"";
+                            operationTextSetter();
                             amountPressed = 0;
+                            checker();
                         }
-                        right.setText(""+amountRight);
-                        wrong.setText(""+amountWrong);
+                        right.setText("" + amountRight);
+                        wrong.setText("" + amountWrong);
                     }
                 }
         );
@@ -70,16 +90,24 @@ public class MainActivity extends AppCompatActivity {
                 new Button.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        mTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("Action")
+                                .setAction("Share")
+                                .build());
                         if (amountPressed == 0) {
                             userChoice1 = numberStore[1];
                             amountPressed++;
+                            slot1 = numberStore[1]+"";
+                            operationTextSetter();
                         } else if (amountPressed == 1) {
                             userChoice2 = numberStore[1];
-                            checker();
+                            slot2 = numberStore[1]+"";
+                            operationTextSetter();
                             amountPressed = 0;
+                            checker();
                         }
-                        right.setText(""+amountRight);
-                        wrong.setText(""+amountWrong);
+                        right.setText("" + amountRight);
+                        wrong.setText("" + amountWrong);
                     }
                 }
         );
@@ -87,16 +115,24 @@ public class MainActivity extends AppCompatActivity {
                 new Button.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        mTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("Action")
+                                .setAction("Share")
+                                .build());
                         if (amountPressed == 0) {
                             userChoice1 = numberStore[2];
                             amountPressed++;
+                            slot1 = numberStore[2]+"";
+                            operationTextSetter();
                         } else if (amountPressed == 1) {
                             userChoice2 = numberStore[2];
-                            checker();
+                            slot2 = numberStore[2]+"";
+                            operationTextSetter();
                             amountPressed = 0;
+                            checker();
                         }
-                        right.setText(""+amountRight);
-                        wrong.setText(""+amountWrong);
+                        right.setText("" + amountRight);
+                        wrong.setText("" + amountWrong);
                     }
                 }
         );
@@ -104,23 +140,35 @@ public class MainActivity extends AppCompatActivity {
                 new Button.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        mTracker.send(new HitBuilders.EventBuilder()
+                                .setCategory("Action")
+                                .setAction("Share")
+                                .build());
                         boolean checkerResult = false;
                         if (amountPressed == 0) {
                             userChoice1 = numberStore[3];
                             amountPressed++;
+                            slot1 = numberStore[3]+"";
+                            operationTextSetter();
                         } else if (amountPressed == 1) {
                             userChoice2 = numberStore[3];
-                            checkerResult = checker();
+                            slot2 = numberStore[3]+"";
+                            operationTextSetter();
                             amountPressed = 0;
+                            checker();
                         }
-                        right.setText(""+amountRight);
-                        wrong.setText(""+amountWrong);
+                        right.setText("" + amountRight);
+                        wrong.setText("" + amountWrong);
                     }
                 }
         );
     }
 
     public void startLocal(){
+        slot1 = "_";
+        slot2 = "_";
+        localMethod="";
+        amountPressed = 0;
         changeButtonNumbers();
         TextView num1Text = (TextView)findViewById(R.id.num1);
         TextView num2Text = (TextView)findViewById(R.id.num2);
@@ -128,9 +176,9 @@ public class MainActivity extends AppCompatActivity {
         TextView num4Text = (TextView)findViewById(R.id.num4);
 
         num1Text.setText(""+numberStore[0]);
-        num2Text.setText(""+numberStore[1]);
-        num3Text.setText(""+numberStore[2]);
-        num4Text.setText(""+numberStore[3]);
+        num2Text.setText("" + numberStore[1]);
+        num3Text.setText("" + numberStore[2]);
+        num4Text.setText("" + numberStore[3]);
 
         setMethodAndTarget();
     }
@@ -145,52 +193,62 @@ public class MainActivity extends AppCompatActivity {
             }
         }
         previousMethod = method;
-        TextView operationText = (TextView)findViewById(R.id.operation);
-        operationText.setText(method + ":");
-
         int a = rand.nextInt(4);
         int b = rand.nextInt(4);
 
-        if (method.equals("Addition")) {
+        if (method.equals("Add")) {
             target = numberStore[a] + numberStore[b];
-        } else if (method.equals("Subtraction")){
+            localMethod = "+";
+        } else if (method.equals("Subtract")){
             target = Math.abs(numberStore[a] - numberStore[b]);
-        } else if (method.equals("Multiplication")) {
+            localMethod = "-";
+        } else if (method.equals("Multiply")) {
             target = numberStore[a] * numberStore[b];
-        } else if (method.equals("Division")) {
-            if (numberStore[a]!=0 || numberStore[b]!=0)
+            localMethod = "*";
+        } else if (method.equals("Divide")) {
+            if (numberStore[a]!=0 || numberStore[b]!=0) {
                 target = numberStore[a] / numberStore[b];
+                localMethod = "/";
+            }
             else {
                 target = numberStore[a] * numberStore[b];
-                operationText.setText("Multiplication");
+                method = "Multiply";
+                localMethod = "*";
             }
         }
-        TextView targetText = (TextView)findViewById(R.id.target);
-        targetText.setText("  Target = " + String.valueOf(target));
+        operationTextSetter();
     }
 
+    public void operationTextSetter(){
+        TextView operationText = (TextView)findViewById(R.id.operation);
+        operationText.setText(Html.fromHtml(slot1 + " <b>" + localMethod + "</b> " + slot2 + " = <b>" + target + "</b>"));
+    }
     public boolean checker(){
+        final TextView wrong = (TextView)findViewById(R.id.wrong);
         boolean whtReturn = true;
         int checker = 0;
-        if (method.equals("Addition")) {
+        if (method.equals("Add")) {
             checker = userChoice1 + userChoice2;
-        } else if (method.equals("Subtraction")){
+        } else if (method.equals("Subtract")){
             checker = Math.abs(userChoice1 - userChoice2);
-        } else if (method.equals("Multiplication")) {
+        } else if (method.equals("Multiply")) {
             checker = userChoice1 * userChoice2;
-        } else if (method.equals("Division")) {
+        } else if (method.equals("Divide")) {
             checker = userChoice1/userChoice2;
         }
 
         if (checker == target) {
-            System.out.println(true);
             amountRight++;
             startLocal();
             timer.start();
         } else {
-            System.out.println(false);
+            v.vibrate(300);
+            wrong.setTextColor(Color.WHITE);
             amountWrong++;
             amountPressed=0;
+            slot1 = "_";
+            slot2 = "_";
+            operationTextSetter();
             whtReturn = false;
         }
         return whtReturn;
@@ -231,7 +289,6 @@ public class MainActivity extends AppCompatActivity {
         if (id == R.id.action_settings) {
             return true;
         }
-
         return super.onOptionsItemSelected(item);
     }
 }
